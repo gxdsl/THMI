@@ -119,9 +119,15 @@ int main(void)
     Status.Voltage = 0;
     Status.Key = 0;
     Status.Sleep = 0;
+    
+    uint32_t ADC_Value = 0;
+	float Data = 0;
+	uint16_t Vol_Value = 0;
 
   	HAL_SuspendTick();	//暂停滴答定时器，防止通过滴答定时器中断唤醒
 	HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI); /* 执行WFI指令, 进入睡眠模式 */
+    
+    HAL_GPIO_WritePin(Test_GPIO_GPIO_Port,Test_GPIO_Pin,1);
   
   /* USER CODE END 2 */
 
@@ -148,8 +154,22 @@ int main(void)
         if(Status.Key == 1)
         {
             Status.Key = 0;
-//            SHT40_Get();
+            HAL_ADC_Start(&hadc1);     //启动ADC转换
+            HAL_ADC_PollForConversion(&hadc1, 50);   //等待转换完成，50为最大等待时间，单位为ms
+            if(HAL_IS_BIT_SET(HAL_ADC_GetState(&hadc1), HAL_ADC_STATE_REG_EOC))
+            {
+                ADC_Value = HAL_ADC_GetValue(&hadc1);   //获取AD值
+                Data = (ADC_Value*3.3f)/4095.0f;
+            }
         }
+        Vol_Value = (uint16_t)(Data * 100)*2;
+		ShowVol(1,1,Vol_Value / 100);
+		ShowVol(1,2,Vol_Value /10 %10);
+		ShowVol(1,3,Vol_Value % 10);
+        ShowVol(2,1,Vol_Value / 100);
+		ShowVol(2,2,Vol_Value /10 %10);
+		ShowVol(2,3,Vol_Value % 10);
+        
     }
     if(Status.Sleep == 1)
     {
@@ -237,8 +257,9 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
             
             if (pressDuration >= LONG_PRESS_THRESHOLD)// 长按操作
             {
-                HAL_GPIO_TogglePin(Test_GPIO_GPIO_Port, Test_GPIO_Pin); // 切换测试LED状态
+//                HAL_GPIO_TogglePin(Test_GPIO_GPIO_Port, Test_GPIO_Pin); // 切换测试LED状态
                 HAL_TIM_Base_Start_IT(&htim14);    //开始定时器
+                Status.Voltage = 1;
                 
             }
             else if (pressDuration >= SHORT_PRESS_THRESHOLD)// 短按操作

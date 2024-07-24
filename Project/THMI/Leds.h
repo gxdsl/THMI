@@ -11,5 +11,6 @@
 
 void SN74HC595_Send_Data(unsigned char sn_num,unsigned int sendValue);
 void ShowNum(uint8_t row, uint8_t column, uint8_t value);
+void ShowVol(uint8_t row, uint8_t column, uint8_t value);
 
 #endif

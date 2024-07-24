@@ -108,6 +108,52 @@ void ShowNum(uint8_t row, uint8_t column, uint8_t value)
 	}
 }
 
+void ShowVol(uint8_t row, uint8_t column, uint8_t value)
+{
+	if(row == 1)
+	{
+		switch(column)
+		{
+			case 1:	//如果是第一排第一个
+					SN74HC595_Send_Data(SN_DIG,0xFE);
+					SN74HC595_Send_Data(Humi_LED,sgh_value[value]|0x80);//显示值对应16进制数
+				break;
+			case 2:
+					SN74HC595_Send_Data(SN_DIG,0xFD);
+					SN74HC595_Send_Data(Humi_LED,(sgh_value[value]));
+				break;
+			case 3:
+					SN74HC595_Send_Data(SN_DIG,0xFB);
+					SN74HC595_Send_Data(Humi_LED,sgh_value[value]);
+				break;
+			default:
+				break;
+		}
+		SN74HC595_Send_Data(Humi_LED,0x00);	//消影，防止错位
+	}
+	else
+	{
+		switch(column)
+		{
+			case 1:
+					SN74HC595_Send_Data(SN_DIG,0xF7);
+					SN74HC595_Send_Data(Temp_LED,sgh_value[value]|0x80);
+				break;
+			case 2:
+					SN74HC595_Send_Data(SN_DIG,0xEF);
+					SN74HC595_Send_Data(Temp_LED,(sgh_value[value]));
+				break;
+			case 3:
+					SN74HC595_Send_Data(SN_DIG,0xDF);
+					SN74HC595_Send_Data(Temp_LED,sgh_value[value]);
+				break;
+			default:
+				break;
+		}
+		SN74HC595_Send_Data(Temp_LED,0x00);
+	}
+}
+
 
 
 
