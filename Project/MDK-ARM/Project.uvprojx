@@ -1024,16 +1024,6 @@
               <FileType>1</FileType>
               <FilePath>..\THMI\SHT40.c</FilePath>
             </File>
-            <File>
-              <FileName>Voltage.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\THMI\Voltage.c</FilePath>
-            </File>
-            <File>
-              <FileName>Key.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\THMI\Key.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>

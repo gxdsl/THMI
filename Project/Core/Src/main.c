@@ -28,8 +28,6 @@
 
 #include "Leds.h"
 #include "SHT40.h"
-#include "Voltage.h"
-#include "Key.h"
 
 /* USER CODE END Includes */
 
@@ -40,6 +38,9 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+
+#define SHORT_PRESS_THRESHOLD 100 // 短按的阈值，单位为ms
+#define LONG_PRESS_THRESHOLD 2000 // 长按的阈值，单位为ms
 
 /* USER CODE END PD */
 
@@ -127,7 +128,7 @@ int main(void)
   	HAL_SuspendTick();	//暂停滴答定时器，防止通过滴答定时器中断唤醒
 	HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI); /* 执行WFI指令, 进入睡眠模式 */
     
-    HAL_GPIO_WritePin(Test_GPIO_GPIO_Port,Test_GPIO_Pin,1);
+    HAL_GPIO_WritePin(Test_GPIO_GPIO_Port,Test_GPIO_Pin,GPIO_PIN_SET);
   
   /* USER CODE END 2 */
 
